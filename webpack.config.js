@@ -26,7 +26,8 @@ module.exports = {
     devServer: {
       overlay: true,
       open: true,
-      hot: true
+      hot: true,
+      inline: false,
     },
 
     devtool: 'inline-source-map', 
@@ -37,7 +38,11 @@ module.exports = {
                 test: /\.(tsx|ts)$/,
                 loader: 'awesome-typescript-loader',
                 exclude: '/node_modules/'
-            } 
+            },
+            {
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader' ]
+            }
         ]
     },
     plugins: [

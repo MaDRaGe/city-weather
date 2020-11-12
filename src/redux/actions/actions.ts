@@ -1,58 +1,42 @@
 import {
-  COMPANY_REPOS_FETCHED_FAILURE,
-  COMPANY_REPOS_FETCHED_SUCCESS,
-  COMPANY_REPOS_FETCH_START,
-  SELECT_PAGINATION_PAGE,
-  IRepository,
+  FETCH_CITY_WEATHER,
+  CITY_WEATHER_FETCH_SUCCESS,
+  CITY_WEATHER_FETCH_FAILURE,
   CompanyActionTypes
 } from '../types';
 import github from '../../api/openweather';
 
-export const fetchCompanyRepos = (companyName: string) => {
+export const fetchCityWeather = (cityName: string) => {
   return (dispatch) => {
-    dispatch(companyResosFetchStart())
-    github.get(`weather?q=moscow&appid=6036a038a5aecd393373e79aed8f46ef`)
+    github.get(`weather?q=${cityName}&appid=6036a038a5aecd393373e79aed8f46ef`)
       .then((response: any) => {
-        console.log(response.data)
-        const companyRepos: IRepository[] = response.data.map((repo): IRepository => {
-          return {
-            name: repo.name,
-            url: repo.html_url,
-            forkCount: repo.forks,
-            watchCount: repo.watchers,
-            starCount: repo.stargazers_count
-          }
-        })
-        dispatch(companyReposFetchSuccess(companyRepos))
+        dispatch(cityWeatherFetchedSuccess({
+          clouds: response.data.clouds.all,
+          temp: {
+            feels_like: response.data.main.feels_like,
+            max: response.data.main.temp_max,
+            min: response.data.main.temp_min,
+            current: response.data.main.temp
+          },
+          humidity: response.data.humidity,
+          pressure: response.data.pressure
+        }))
       })
       .catch(() => {
-        dispatch(companyReposFetchFailure())
+        dispatch(cityWeatherFetchedFailure())
       })
   }
 }
 
-export const companyResosFetchStart = (): CompanyActionTypes => {
+export const cityWeatherFetchedSuccess = (cityWeather) => {
   return {
-    type: COMPANY_REPOS_FETCH_START
+    type: CITY_WEATHER_FETCH_SUCCESS,
+    payload: cityWeather
   }
 }
 
-export const companyReposFetchSuccess = (companyReposList: IRepository[]): CompanyActionTypes => {
+export const cityWeatherFetchedFailure = () => {
   return {
-    type: COMPANY_REPOS_FETCHED_SUCCESS,
-    payload: companyReposList
-  }
-}
-
-export const companyReposFetchFailure = (): CompanyActionTypes  => {
-  return {
-    type: COMPANY_REPOS_FETCHED_FAILURE
-  }
-}
-
-export const selectPaginationPage = (page): CompanyActionTypes => {
-  return {
-    type: SELECT_PAGINATION_PAGE,
-    payload: page
+    type: CITY_WEATHER_FETCH_FAILURE
   }
 }

@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 
-import company from './company'
+import city from './city';
 
 export default combineReducers({
-  company
+  city
 })
 
