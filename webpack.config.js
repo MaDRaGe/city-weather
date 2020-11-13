@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const paths = {
     src: path.resolve(__dirname, 'src'),
@@ -26,7 +27,8 @@ module.exports = {
     devServer: {
       overlay: true,
       open: true,
-      hot: true
+      hot: true,
+      inline: false,
     },
 
     devtool: 'inline-source-map', 
@@ -36,11 +38,29 @@ module.exports = {
             {
                 test: /\.(tsx|ts)$/,
                 loader: 'awesome-typescript-loader',
-                exclude: '/node_modules/'
-            } 
+                include: path.resolve(__dirname, 'src'),
+                options: {
+                    transpileOnly: true
+                }
+            },
+            {
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader' ],
+                include: path.resolve(__dirname, 'src')
+            }
         ]
     },
+
+    optimization: {
+        runtimeChunk: true,
+        removeAvailableModules: false,
+        removeEmptyChunks: false,
+        splitChunks: false,
+    },
     plugins: [
+    //   new ForkTsCheckerWebpackPlugin({
+    //       context: path.resolve(__dirname, 'src')
+    //   }),
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
           template: path.resolve(__dirname, 'src/index.html')

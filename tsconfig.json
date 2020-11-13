@@ -10,5 +10,14 @@
       "es7",
       "dom"
     ],
-  }
+  },
+  "exclude": [
+    "node_modules/**/*",
+    ".serverless/**/*",
+    ".webpack/**/*",
+    "_warmup/**/*",
+    ".vscode/**/*",
+    "*.config.js",
+    "**/*.js"
+  ]
 }

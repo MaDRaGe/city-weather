@@ -1,50 +1,58 @@
-export const FETCH_COMPANY_REPOS = 'FETCH_COMPANY_REPOS';
-export const COMPANY_REPOS_FETCHED_SUCCESS = 'COMPANY_REPOS_FETCHED_SUCCESS';
-export const COMPANY_REPOS_FETCHED_FAILURE = 'COMPANY_REPOS_FETCHED_FAILURE';
-export const COMPANY_REPOS_FETCH_START = 'COMPANY_REPOS_FETCH_START';
-export const SELECT_PAGINATION_PAGE = 'SELECT_PAGINATION_PAGE';
-export const REPOS_ON_PAGE_COUNT = 5;
+export const CITY_WEATHER_FETCH_SUCCESS = 'CITY_WEATHER_FETCH_SUCCESS';
+export const CITY_WEATHER_FETCH_FAILURE = 'CITY_WEATHER_FETCH_FAILURE';
+export const FETCH_CITY_WEATHER = 'FETCH_CITY_WEATHER';
+export const LOAD_CITY_LIST_FROM_LOCAL_STORAGE = 'LOAD_CITY_LIST_FROM_LOCAL_STORAGE';
+export const DELETE_CITY = 'DELETE_CITY';
+export const LOAD_USER_CITY = 'LOAD_USER_CITY';
+export const FETCH_WEEK_WEATHER = 'FETCH_WEEK_WEATHER';
 
+export interface IStore {
 
-export interface IRepository {
-  name: string;
-  url: string;
-  forkCount: number;
-  watchCount: number;
-  starCount: number;
 }
 
-export interface Store {
-  company: string | null;
-  companyReposList: IRepository[] | null;
-  isReposListLoading: boolean;
-  paginationCurrentPage: number;
-  paginationPagesCount: number;
-  reposOnPage: IRepository[] | null;
-  isReposListLoaded: boolean | null;
+export interface IDayWeather {
+  date: string,
+  clouds: string,
+  temp: string,
+  humidity: string,
+  pressure: string
 }
 
-interface SelectPaginationPageAction {
-  type: typeof SELECT_PAGINATION_PAGE,
-  payload: number
+interface FecthCityWeatherAction {
+  type: typeof FETCH_CITY_WEATHER,
+  payload: string
 }
 
-
-interface CompanyReposFetchedSuccessAction {
-  type: typeof COMPANY_REPOS_FETCHED_SUCCESS,
-  payload: IRepository[]
+interface CityFetchWeatherSuccessAction {
+  type: typeof CITY_WEATHER_FETCH_SUCCESS
+  payload: {
+    name: string,
+    days: IDayWeather[]
+  }
 }
 
-interface CompanyReposFetchedFailureAction {
-  type: typeof COMPANY_REPOS_FETCHED_FAILURE
+interface CityFetchWeatherFailureAction {
+  type: typeof CITY_WEATHER_FETCH_FAILURE
 }
 
-interface CompanyReposFetchStartAction {
-  type: typeof COMPANY_REPOS_FETCH_START
+interface LoadCityListFromLocalStorageAction {
+  type: typeof LOAD_CITY_LIST_FROM_LOCAL_STORAGE
 }
 
-export type CompanyActionTypes = 
-  CompanyReposFetchedSuccessAction | 
-  CompanyReposFetchedFailureAction |
-  CompanyReposFetchStartAction |
-  SelectPaginationPageAction;
+interface DeleteCityAction {
+  type: typeof DELETE_CITY,
+  payload: string
+}
+
+interface LoadUserCityAction {
+  type: typeof LOAD_USER_CITY
+}
+
+export type CityActionType = 
+  FecthCityWeatherAction |
+  CityFetchWeatherSuccessAction |
+  CityFetchWeatherFailureAction | 
+  DeleteCityAction |
+  LoadCityListFromLocalStorageAction | 
+  LoadUserCityAction;
+
