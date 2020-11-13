@@ -1,9 +1,9 @@
 import {
-  FETCH_CITY_WEATHER,
+  DELETE_CITY,
   CITY_WEATHER_FETCH_SUCCESS,
   CITY_WEATHER_FETCH_FAILURE,
   LOAD_CITY_LIST_FROM_LOCAL_STORAGE,
-  CompanyActionTypes
+  CityActionType
 } from '../types';
 import github from '../../api/openweather';
 
@@ -11,7 +11,6 @@ export const fetchCityWeather = (cityName: string) => {
   return (dispatch) => {
     github.get(`weather?q=${cityName}&appid=6036a038a5aecd393373e79aed8f46ef`)
       .then((response: any) => {
-        console.log(response)
         dispatch(cityWeatherFetchedSuccess({
           name: response.data.name,
           clouds: response.data.clouds.all,
@@ -31,21 +30,28 @@ export const fetchCityWeather = (cityName: string) => {
   }
 }
 
-export const cityWeatherFetchedSuccess = (cityWeather) => {
+export const cityWeatherFetchedSuccess = (cityWeather): CityActionType => {
   return {
     type: CITY_WEATHER_FETCH_SUCCESS,
     payload: cityWeather
   }
 }
 
-export const cityWeatherFetchedFailure = () => {
+export const cityWeatherFetchedFailure = (): CityActionType => {
   return {
     type: CITY_WEATHER_FETCH_FAILURE
   }
 }
 
-export const loadCityListFromLocalStorage = () => {
+export const loadCityListFromLocalStorage = (): CityActionType => {
   return {
     type: LOAD_CITY_LIST_FROM_LOCAL_STORAGE
+  }
+}
+
+export const deleteCity = (cityName) => {
+  return {
+    type: DELETE_CITY,
+    payload: cityName
   }
 }

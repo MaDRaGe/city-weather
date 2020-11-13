@@ -1,5 +1,5 @@
 import {
-  FETCH_CITY_WEATHER,
+  DELETE_CITY,
   CITY_WEATHER_FETCH_FAILURE,
   CITY_WEATHER_FETCH_SUCCESS,
   LOAD_CITY_LIST_FROM_LOCAL_STORAGE
@@ -12,6 +12,12 @@ const initialState = {
 const city = (state = initialState, action) => {
   switch (action.type) {
     case CITY_WEATHER_FETCH_SUCCESS:
+      const isContainsCity = state.cityList.filter(function (city) {
+        return city.name === action.payload.name
+      })
+      if (isContainsCity.length > 0) {
+        return state
+      }
       localStorage.setItem("cityList", JSON.stringify([
         action.payload,
         ...state.cityList
@@ -25,10 +31,19 @@ const city = (state = initialState, action) => {
       }
     case CITY_WEATHER_FETCH_FAILURE:
     case LOAD_CITY_LIST_FROM_LOCAL_STORAGE:
-      console.log('load city');
+      let cityList = JSON.parse(localStorage.getItem("cityList")) || [];
       return {
         ...state,
-        cityList: JSON.parse(localStorage.getItem("cityList"))
+        cityList: cityList
+      }
+    case DELETE_CITY: 
+      const newCityList = state.cityList.filter((city) => {
+        return city.name !== action.payload
+      })
+      localStorage.setItem("cityList", JSON.stringify(newCityList))
+      return {
+        ...state,
+        cityList: newCityList
       }
     default: 
       return state;
