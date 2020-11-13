@@ -1,55 +1,54 @@
 import axios from 'axios';
 
-const apiKey = '6036a038a5aecd393373e79aed8f46ef';
+const apiKey = '9e283940719a44b5ae0120745201311';
 
 class Weather {
   private api = axios.create({
-    baseURL: 'https://api.openweathermap.org/data/2.5',
+    baseURL: 'http://api.weatherapi.com/v1',
   });
 
-  public async getCityByName(cityName: string): Promise<any> {
+  public async getForecastByCityName(cityName) {
     try {
-      const response = await this.api.get(`weather?q=${cityName}&appid=${apiKey}`)
-      return {
-          name: response.data.name,
-          clouds: response.data.clouds.all,
-          temp: {
-            feels_like: response.data.main.feels_like,
-            max: response.data.main.temp_max,
-            min: response.data.main.temp_min,
-            current: response.data.main.temp
-          },
-          humidity: response.data.main.humidity,
-          pressure: response.data.main.pressure
+      const response = await this.api.get(`forecast.json?q=${cityName}&days=${7}&key=${apiKey}`)
+      console.log(response)
+      const days = response.data.forecast.forecastday.map((day) => {
+        return {
+          date: day.date,
+          clouds: day.hour[12].cloud,
+          temp: day.hour[12].temp_c,
+          humidity: day.hour[12].humidity,
+          pressure: day.hour[12].pressure_in
         }
-    } catch (error) {
+      })
       return {
-          error: true
-        }
-    }
-      
-  }
-
-  public async getCityByCoords(userCoords): Promise<any> {
-    try {
-      const response = await this.api.get(`find?lat=${userCoords.lat}&lon=${userCoords.long}&cnt=${1}&appid=${apiKey}`)
-      const city = response.data.list[0];
-      return {
-        name: city.name,
-        clouds: city.clouds.all,
-        temp: {
-          feels_like: city.main.feels_like,
-          max: city.main.temp_max,
-          min: city.main.temp_min,
-          current: city.main.temp
-        },
-        humidity: city.main.humidity,
-        pressure: city.main.pressure
+        name: response.data.location.name,
+        days: days
       }
     } catch (error) {
       return {
         error: true
       }
+    }
+  }
+
+  public async getForecastByCityCoords(userCoords): Promise<any> {
+    try {
+      const response = await this.api.get(`forecast.json?q=${userCoords.lat},${userCoords.long}&days=7&key=${apiKey}`)
+      const days = response.data.forecast.forecastday.map((day) => {
+        return {
+          date: day.date,
+          clouds: day.hour[12].cloud,
+          temp: day.hour[12].temp_c,
+          humidity: day.hour[12].humidity,
+          pressure: day.hour[12].pressure_in
+        }
+      })
+      return {
+        name: response.data.location.name,
+        days: days
+      }
+    } catch (error) {
+      return 
     }
   }
 }

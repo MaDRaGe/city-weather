@@ -32,7 +32,6 @@ const city = (state = initialState, action) => {
         ]
       }
     case CITY_WEATHER_FETCH_FAILURE:
-      console.log('fail')
       return {
         ...state,
         isFetchSuccess: false

@@ -15,6 +15,7 @@ export const fetchCityWeather = (cityName: string) => {
         if (response.error) {
           dispatch(cityWeatherFetchedFailure())
         } else {
+          console.log(response)
           dispatch(cityWeatherFetchedSuccess(response))
         }
       })
@@ -52,6 +53,19 @@ export const loadUserCity = (userCoords) => {
     openweather.getCityByCoords(userCoords)
       .then((response) => {
         if (!response.error) {
+          dispatch(cityWeatherFetchedSuccess(response))
+        }
+      })
+  }
+}
+
+export const fetchWeekWeather = (cityName) => {
+  return (dispatch) => {
+    openweather.getWeekByCityName(cityName)
+      .then((response) => {
+        if (response.error) {
+          dispatch(cityWeatherFetchedFailure())
+        } else {
           dispatch(cityWeatherFetchedSuccess(response))
         }
       })

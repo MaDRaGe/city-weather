@@ -22,10 +22,16 @@ const App = (props) => {
   return (
     <>
       <Layout>
-        <Header>Header</Header>
+        <Header className="header">
+          <Row>
+            <Col span={10} offset={7}>
+              <h2>Enter city name to get info about the weather in this area</h2>
+            </Col>
+          </Row>
+        </Header>
         <Content>
           <Row>
-            <Col span={6} offset={8}>
+            <Col span={10} offset={7}>
               <CityWeatherSearch />
               <CityList />
             </Col>

@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { fetchCityWeather } from '../redux/actions/actions';
+import { fetchCityWeather, fetchWeekWeather } from '../redux/actions/actions';
 import { Input, Alert } from 'antd';
+
+const { Search } = Input;
 
 export interface ICompanySearchProps {
 
@@ -21,17 +23,30 @@ const CityWeatherSearch = (props) => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    props.fetchCityWeather(inputValue);
-    setInputValue('')
+    props.fetchWeekWeather(inputValue);
+  }
+
+  const onSearch = () => {
+    props.fetchWeekWeather(inputValue);
   }
   
   return (
     <div>
+      
       <form onSubmit={onSubmit}>
-          <Input onChange={(event) => {
-            setInputValue(event.target.value);
-          }} placeholder="Weather"/>
-      </form>
+        <Search 
+          onSubmit={onSearch}
+          onSearch={onSearch}
+          onChange={
+            (event) => {
+              setInputValue(event.target.value);
+            }
+          }
+          value={inputValue}
+          placeholder="City..."
+          enterButton="Search"
+        />
+      </form> 
       {statusView}
     </div>
   )
@@ -45,6 +60,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    fetchWeekWeather: (cityName) => dispatch(fetchWeekWeather(cityName)),
     fetchCityWeather: (cityName) => dispatch(fetchCityWeather(cityName)),
   }
 }
