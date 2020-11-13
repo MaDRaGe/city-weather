@@ -14,7 +14,7 @@ const CityWeatherSearch = (props) => {
   
   let statusView;
   if (!props.isFetchSuccess) {
-    statusView = <Alert message="Error: city has not been found, please check if city name is right"/>
+    statusView = <Alert type="error" message="Error: city has not been found, please check if city name is right"/>
   } else {
     statusView = null;
   }
