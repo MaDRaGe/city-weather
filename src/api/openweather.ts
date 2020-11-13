@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IDayWeather } from '../redux/types';
 
 const apiKey = '9e283940719a44b5ae0120745201311';
 
@@ -7,11 +8,10 @@ class Weather {
     baseURL: 'http://api.weatherapi.com/v1',
   });
 
-  public async getForecastByCityName(cityName) {
+  public async getForecastByCityName(cityName): Promise<any> {
     try {
       const response = await this.api.get(`forecast.json?q=${cityName}&days=${7}&key=${apiKey}`)
-      console.log(response)
-      const days = response.data.forecast.forecastday.map((day) => {
+      const days = response.data.forecast.forecastday.map((day): IDayWeather => {
         return {
           date: day.date,
           clouds: day.hour[12].cloud,
@@ -34,7 +34,7 @@ class Weather {
   public async getForecastByCityCoords(userCoords): Promise<any> {
     try {
       const response = await this.api.get(`forecast.json?q=${userCoords.lat},${userCoords.long}&days=7&key=${apiKey}`)
-      const days = response.data.forecast.forecastday.map((day) => {
+      const days = response.data.forecast.forecastday.map((day): IDayWeather => {
         return {
           date: day.date,
           clouds: day.hour[12].cloud,
@@ -48,7 +48,9 @@ class Weather {
         days: days
       }
     } catch (error) {
-      return 
+      return {
+        error: true
+      }
     }
   }
 }

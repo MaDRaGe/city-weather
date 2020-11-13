@@ -1,21 +1,19 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { fetchCityWeather, fetchWeekWeather } from '../redux/actions/actions';
+import { fetchWeekForecastByCityName } from '../redux/actions/actions';
 import { Input, Alert } from 'antd';
-
 const { Search } = Input;
 
-export interface ICompanySearchProps {
-
+interface ICityWeatherSearch {
+  isFetchSuccess: boolean,
+  fetchWeekForecast: Function
 }
 
-
-const CityWeatherSearch = (props) => {
+const CityWeatherSearch = ({ isFetchSuccess, fetchWeekForecast }: ICityWeatherSearch) => {
   const [inputValue, setInputValue] = React.useState('');
-  window.navigator.geolocation.getCurrentPosition((position) => {});
   
   let statusView;
-  if (!props.isFetchSuccess) {
+  if (!isFetchSuccess) {
     statusView = <Alert type="error" message="Error: city has not been found, please check if city name is right"/>
   } else {
     statusView = null;
@@ -23,16 +21,15 @@ const CityWeatherSearch = (props) => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    props.fetchWeekWeather(inputValue);
+    fetchWeekForecast(inputValue);
   }
 
   const onSearch = () => {
-    props.fetchWeekWeather(inputValue);
+    fetchWeekForecast(inputValue);
   }
   
   return (
     <div>
-      
       <form onSubmit={onSubmit}>
         <Search 
           onSubmit={onSearch}
@@ -60,8 +57,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchWeekWeather: (cityName) => dispatch(fetchWeekWeather(cityName)),
-    fetchCityWeather: (cityName) => dispatch(fetchCityWeather(cityName)),
+    fetchWeekForecast: (cityName) => dispatch(fetchWeekForecastByCityName(cityName)),
   }
 }
 

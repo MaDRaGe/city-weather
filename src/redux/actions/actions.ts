@@ -3,24 +3,10 @@ import {
   CITY_WEATHER_FETCH_SUCCESS,
   CITY_WEATHER_FETCH_FAILURE,
   LOAD_CITY_LIST_FROM_LOCAL_STORAGE,
-  LOAD_USER_CITY,
-  CityActionType
+  CityActionType,
+  IDayWeather
 } from '../types';
 import openweather from '../../api/openweather';
-
-export const fetchCityWeather = (cityName: string) => {
-  return (dispatch) => {
-    openweather.getCityByName(cityName)
-      .then((response) => {
-        if (response.error) {
-          dispatch(cityWeatherFetchedFailure())
-        } else {
-          console.log(response)
-          dispatch(cityWeatherFetchedSuccess(response))
-        }
-      })
-  }
-}
 
 export const cityWeatherFetchedSuccess = (cityWeather): CityActionType => {
   return {
@@ -41,16 +27,16 @@ export const loadCityListFromLocalStorage = (): CityActionType => {
   }
 }
 
-export const deleteCity = (cityName): CityActionType => {
+export const deleteCity = (cityName: string): CityActionType => {
   return {
     type: DELETE_CITY,
     payload: cityName
   }
 }
 
-export const loadUserCity = (userCoords) => {
+export const loadUserCity = (userCoords: { lat: number, long: number }): Function => {
   return (dispatch) => {
-    openweather.getCityByCoords(userCoords)
+    openweather.getForecastByCityCoords(userCoords)
       .then((response) => {
         if (!response.error) {
           dispatch(cityWeatherFetchedSuccess(response))
@@ -59,9 +45,9 @@ export const loadUserCity = (userCoords) => {
   }
 }
 
-export const fetchWeekWeather = (cityName) => {
+export const fetchWeekForecastByCityName = (cityName: string): Function => {
   return (dispatch) => {
-    openweather.getWeekByCityName(cityName)
+    openweather.getForecastByCityName(cityName)
       .then((response) => {
         if (response.error) {
           dispatch(cityWeatherFetchedFailure())

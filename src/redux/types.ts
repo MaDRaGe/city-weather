@@ -6,12 +6,16 @@ export const DELETE_CITY = 'DELETE_CITY';
 export const LOAD_USER_CITY = 'LOAD_USER_CITY';
 export const FETCH_WEEK_WEATHER = 'FETCH_WEEK_WEATHER';
 
-export interface IWeather {
+export interface IStore {
 
 }
 
-export interface Store {
-
+export interface IDayWeather {
+  date: string,
+  clouds: string,
+  temp: string,
+  humidity: string,
+  pressure: string
 }
 
 interface FecthCityWeatherAction {
@@ -21,7 +25,10 @@ interface FecthCityWeatherAction {
 
 interface CityFetchWeatherSuccessAction {
   type: typeof CITY_WEATHER_FETCH_SUCCESS
-  payload: any[]
+  payload: {
+    name: string,
+    days: IDayWeather[]
+  }
 }
 
 interface CityFetchWeatherFailureAction {

@@ -8,11 +8,16 @@ import { connect } from 'react-redux';
 import { loadCityListFromLocalStorage, loadUserCity } from '../../redux/actions/actions';
 
 
-const App = (props) => {
+interface IApp {
+  loadCityListFromLocalStorage: Function,
+  loadUserCity: Function
+}
+
+const App = ({loadCityListFromLocalStorage, loadUserCity}: IApp) => {
   React.useEffect(() => {
-    props.loadCityListFromLocalStorage()
+    loadCityListFromLocalStorage()
     window.navigator.geolocation.getCurrentPosition((position) => {
-      props.loadUserCity({
+      loadUserCity({
         lat: position.coords.latitude,
         long: position.coords.longitude
       })

@@ -2,13 +2,17 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import City from './City';
 
-const CityList = (props) => {
+interface ICityList {
+  cityList: any[]
+}
+
+const CityList = ({cityList}: ICityList) => {
   React.useEffect(() => {
 
   }, [])
 
-  if (props.cityList.length > 0) {
-    const cardListView = props.cityList.map((city) => {
+  if (cityList.length > 0) {
+    const cardListView = cityList.map((city) => {
       return <City
         name={city.name}
         days={city.days}
