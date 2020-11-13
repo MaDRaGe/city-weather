@@ -6,7 +6,8 @@ import {
 } from '../types';
 
 const initialState = {
-  cityList: []
+  cityList: [],
+  isFetchSuccess: true,
 }
 
 const city = (state = initialState, action) => {
@@ -24,12 +25,18 @@ const city = (state = initialState, action) => {
       ]));
       return {
         ...state,
+        isFetchSuccess: true,
         cityList: [
           action.payload,
           ...state.cityList,
         ]
       }
     case CITY_WEATHER_FETCH_FAILURE:
+      console.log('fail')
+      return {
+        ...state,
+        isFetchSuccess: false
+      }
     case LOAD_CITY_LIST_FROM_LOCAL_STORAGE:
       let cityList = JSON.parse(localStorage.getItem("cityList")) || [];
       return {

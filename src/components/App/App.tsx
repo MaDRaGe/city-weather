@@ -5,13 +5,19 @@ import { Layout, Row, Col } from 'antd';
 import CityList from '../CityList';
 const { Header, Footer, Content } = Layout;
 import { connect } from 'react-redux';
-import { loadCityListFromLocalStorage } from '../../redux/actions/actions';
+import { loadCityListFromLocalStorage, loadUserCity } from '../../redux/actions/actions';
 
 
 const App = (props) => {
   console.log(props);
   React.useEffect(() => {
     props.loadCityListFromLocalStorage()
+    window.navigator.geolocation.getCurrentPosition((position) => {
+      props.loadUserCity({
+        lat: position.coords.latitude,
+        long: position.coords.longitude
+      })
+    })
   }, [])
 
   return (
@@ -33,7 +39,8 @@ const App = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadCityListFromLocalStorage: () => dispatch(loadCityListFromLocalStorage())
+    loadCityListFromLocalStorage: () => dispatch(loadCityListFromLocalStorage()),
+    loadUserCity: (userCoords) => dispatch(loadUserCity(userCoords))
   }
 }
 

@@ -3,13 +3,14 @@ import {
   CITY_WEATHER_FETCH_SUCCESS,
   CITY_WEATHER_FETCH_FAILURE,
   LOAD_CITY_LIST_FROM_LOCAL_STORAGE,
+  LOAD_USER_CITY,
   CityActionType
 } from '../types';
-import github from '../../api/openweather';
+import openweather from '../../api/openweather';
 
 export const fetchCityWeather = (cityName: string) => {
   return (dispatch) => {
-    github.get(`weather?q=${cityName}&appid=6036a038a5aecd393373e79aed8f46ef`)
+    openweather.get(`weather?q=${cityName}&appid=6036a038a5aecd393373e79aed8f46ef`)
       .then((response: any) => {
         dispatch(cityWeatherFetchedSuccess({
           name: response.data.name,
@@ -20,11 +21,12 @@ export const fetchCityWeather = (cityName: string) => {
             min: response.data.main.temp_min,
             current: response.data.main.temp
           },
-          humidity: response.data.humidity,
-          pressure: response.data.pressure
+          humidity: response.data.main.humidity,
+          pressure: response.data.main.pressure
         }))
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log('catch error')
         dispatch(cityWeatherFetchedFailure())
       })
   }
@@ -49,9 +51,34 @@ export const loadCityListFromLocalStorage = (): CityActionType => {
   }
 }
 
-export const deleteCity = (cityName) => {
+export const deleteCity = (cityName): CityActionType => {
   return {
     type: DELETE_CITY,
     payload: cityName
+  }
+}
+
+export const loadUserCity = (userCoords) => {
+  return function (dispatch) {
+    openweather.get(`find?lat=${userCoords.lat}&lon=${userCoords.long}&cnt=${1}&appid=6036a038a5aecd393373e79aed8f46ef`)
+      .then((response) => {
+        console.log(response)
+
+        const city = response.data.list[0];
+        dispatch(cityWeatherFetchedSuccess({
+          name: city.name,
+          clouds: city.clouds.all,
+          temp: {
+            feels_like: city.main.feels_like,
+            max: city.main.temp_max,
+            min: city.main.temp_min,
+            current: city.main.temp
+          },
+          humidity: city.main.humidity,
+          pressure: city.main.pressure
+        }))
+      })
+      .catch((error) => {
+      })
   }
 }
