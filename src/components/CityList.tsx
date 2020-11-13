@@ -3,9 +3,13 @@ import { connect } from 'react-redux';
 import { Card } from 'antd';
 
 const CityList = (props) => {
+  React.useEffect(() => {
+
+  }, [])
   console.log("City List", props);
   const cardListView = props.cityList.map((city) => {
     return <Card>
+      <h2>{city.name}</h2>
       <p>{city.clouds}</p>
       <p>{city.temp.current}</p>
       <p>{city.humidity}</p>
